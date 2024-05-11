@@ -14,11 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\Ecom.Infrastructure\Ecom.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ecom.Infrastructure\Ecom.Infrastructure.csproj" />
+    <Folder Include="wwwroot\images\Products\" />
   </ItemGroup>
 
 </Project>

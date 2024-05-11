@@ -19,9 +19,9 @@ namespace Ecom.Infrastructure.Data.Config
             // builder.HasOne(c => c.Category).WithMany(p => p.Products).HasForeignKey(c => c.CategoryId);
 
             builder.HasData(
-                new Product { Id = 1, Name = "Product_1", Description = "p1", Price = 2000, CategoryId = 1},
-                new Product { Id = 2, Name = "Product_2", Description = "p2", Price = 3000, CategoryId = 2},
-                new Product { Id = 3, Name = "Product_3", Description = "p3", Price = 4000, CategoryId = 1}
+                new Product { Id = 1, Name = "Product_1", Description = "p1", Price = 2000, CategoryId = 1, ProductPicture = "http://"},
+                new Product { Id = 2, Name = "Product_2", Description = "p2", Price = 3000, CategoryId = 2, ProductPicture = "http://" },
+                new Product { Id = 3, Name = "Product_3", Description = "p3", Price = 4000, CategoryId = 1, ProductPicture = "http://" }
                 );
         }
     }

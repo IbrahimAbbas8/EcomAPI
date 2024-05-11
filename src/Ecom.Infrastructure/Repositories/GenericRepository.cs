@@ -1,4 +1,5 @@
-﻿using Ecom.Core.Interfaces;
+﻿using Ecom.Core.Entities;
+using Ecom.Core.Interfaces;
 using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Ecom.Infrastructure.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity<int>
     {
         private readonly EcomDbContext context;
 
@@ -24,7 +25,7 @@ namespace Ecom.Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(T id)
+        public async Task DeleteAsync(int id)
         {
             var entity = await context.Set<T>().FindAsync(id);
             context.Set<T>().Remove(entity);
@@ -37,14 +38,14 @@ namespace Ecom.Infrastructure.Repositories
             return context.Set<T>().AsNoTracking().ToList();
         }
 
-        public async Task<T> GetByIdAsync(T id , params Expression<Func<T, object>>[] includes)
+        public async Task<T> GetByIdAsync(int id , params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> queryable = context.Set<T>();
             foreach (var item in includes)
             {
                 queryable = queryable.Include(item);
             }
-            return await ((DbSet<T>)queryable).FindAsync(id);
+            return await queryable.FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
@@ -62,12 +63,12 @@ namespace Ecom.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(T id)
+        public async Task<T> GetByIdAsync(int id)
         {
             return await context.Set<T>().FindAsync(id);
         }
 
-        public async Task UpdateAsync(T id, T Entity)
+        public async Task UpdateAsync(int id, T Entity)
         {
             var entity = await context.Set<T>().FindAsync(id);
             if(entity is not null)
