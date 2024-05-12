@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Ecom.API.Helper;
 using Ecom.Core.Dtos;
 using Ecom.Core.Entities;
 using Ecom.Core.Interfaces;
+using Ecom.Core.Sharing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,13 +23,13 @@ namespace Ecom.API.Controllers
         }
 
         [HttpGet("get-all-product")]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> Get([FromQuery]ProductParams Params)
         {
-            var products = await unitOf.ProductRepository.GetAllAsync(p => p.Category);
+            var products = await unitOf.ProductRepository.GetAllAsync(Params);
             if(products is not null)
             {
                 var res = mapper.Map<List<ProductDto>>(products);
-                return Ok(res);
+                return Ok(new Pagination<ProductDto>(Params.PageNumber ,Params.PageSize, res.Count(), res));
             }
             return BadRequest();
         }
