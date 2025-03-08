@@ -10,5 +10,6 @@ namespace Ecom.Core.Interfaces
     {
         ICategoryRepository CategoryRepository { get; }
         IProductRepository ProductRepository { get; }
+        IBasketRepository BasketRepository { get; }
     }
 }

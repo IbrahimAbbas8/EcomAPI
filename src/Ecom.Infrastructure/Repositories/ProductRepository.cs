@@ -27,8 +27,9 @@ namespace Ecom.Infrastructure.Repositories
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllAsync(ProductParams Params)
+        public async Task<ReturnProductDto> GetAllAsync(ProductParams Params)
         {
+            var result = new ReturnProductDto();
             var query = await context.Products
                 .Include(c => c.Category)
                 .AsNoTracking()
@@ -55,11 +56,13 @@ namespace Ecom.Infrastructure.Repositories
                 };
             }
 
+            result.TotalItems = query.Count;
+
             // paging
             query = query.Skip((Params.PageSize) * (Params.PageNumber - 1)).Take(Params.PageSize).ToList();
 
-            var res = mapper.Map<List<ProductDto>>(query);
-            return res;
+            result.ProductDtos = mapper.Map<List<ProductDto>>(query);
+            return result;
         }
 
         public async Task<bool> AddAsync(CreateProductDto dto)

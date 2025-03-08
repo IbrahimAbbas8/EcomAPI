@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ecom.API.Errors;
 using Ecom.API.Helper;
 using Ecom.Core.Dtos;
 using Ecom.Core.Entities;
@@ -28,13 +29,15 @@ namespace Ecom.API.Controllers
             var products = await unitOf.ProductRepository.GetAllAsync(Params);
             if(products is not null)
             {
-                var res = mapper.Map<List<ProductDto>>(products);
-                return Ok(new Pagination<ProductDto>(Params.PageNumber ,Params.PageSize, res.Count(), res));
+               // var res = mapper.Map<List<ProductDto>>(products);
+                return Ok(new Pagination<ProductDto>(Params.PageNumber ,Params.PageSize, products.TotalItems, products.ProductDtos));
             }
             return BadRequest();
         }
 
         [HttpGet("get-product-by-id/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(BaseCommonResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetById(int id)
         {
             var product = await unitOf.ProductRepository.GetByIdAsync(id, p => p.Category);
@@ -43,7 +46,7 @@ namespace Ecom.API.Controllers
                 var res = mapper.Map<ProductDto>(product);
                 return Ok(res);
             }
-            return BadRequest($"Not Found This Id [{id}]");
+            return NotFound(new BaseCommonResponse(404));
         }
 
         [HttpPost("add-new-product")]

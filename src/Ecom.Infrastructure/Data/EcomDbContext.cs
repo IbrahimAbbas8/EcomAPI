@@ -1,4 +1,6 @@
 ﻿using Ecom.Core.Entities;
+using Ecom.Core.Entities.Orders;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Ecom.Infrastructure.Data
 {
-    public class EcomDbContext: DbContext
+    public class EcomDbContext: IdentityDbContext<AppUser>
     {
         public EcomDbContext(DbContextOptions<EcomDbContext> options) : base(options)
         {
@@ -17,6 +19,10 @@ namespace Ecom.Infrastructure.Data
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

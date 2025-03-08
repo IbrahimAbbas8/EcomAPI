@@ -38,6 +38,7 @@ namespace Ecom.API.Controllers
         [HttpGet("bad-request/{id}")]
         public ActionResult GetNotFoundRequest(int id)
         {
+            if (!ModelState.IsValid) return BadRequest(new BaseCommonResponse(400));
             return Ok();
         }
         [HttpGet("bad-request")]

@@ -2,6 +2,7 @@
 using Ecom.Core.Interfaces;
 using Ecom.Infrastructure.Data;
 using Microsoft.Extensions.FileProviders;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +21,16 @@ namespace Ecom.Infrastructure.Repositories
 
         public IProductRepository ProductRepository { get; }
 
-        public UnitOfWork(EcomDbContext context, IFileProvider fileProvider, IMapper mapper)
+        public IBasketRepository BasketRepository {  get; }
+
+        public UnitOfWork(EcomDbContext context, IFileProvider fileProvider, IMapper mapper, IConnectionMultiplexer redis)
         {
             this.context = context;
             this.fileProvider = fileProvider;
             this.mapper = mapper;
             CategoryRepository = new CategoryRepository(context);
             ProductRepository = new ProductRepository(context, this.fileProvider, this.mapper);
+            BasketRepository = new BasketRepository(redis, mapper);
         }
 
         
